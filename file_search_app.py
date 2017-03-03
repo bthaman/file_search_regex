@@ -19,7 +19,7 @@ class App(basic_combo_dialog.BasicComboGUI):
                             'Audio (mp3, wav, au, m4p, etc.)': '.+\.(m4p|cdda|mp3|wma|mp4a|au|ra|flac|cda|wav|m4a)$',
                             'PDF files': '.+\.pdf$',
                             'Visio (vsd, vss, vst, vsx, vdx, vtx)': '.+\.(vs(d|s|t|x)|v(d|t)x)$',
-                            'Images (png, gif, jpg, bmp, tif, svg)': '.+\.(png|gif|jpg|bmp|ico|tif|svgx?)$',
+                            'Images (png, gif, jpg, bmp, tif, ico, svg)': '.+\.(png|gif|jpg|bmp|tif|ico|svgx?)$',
                             'Word/Excel/PDF files': '.+\.(xls(x|m|b)?|docx?|pdf)$',
                             'Video (avi, wmv, mpg, mp4, etc.)': '.+\.(avi|wmv|qt|mov|mp(4|e?g|v)|m4p|flv|rm|webm)$',
                             'Numeric file names': '^[0-9_\-\.]+\.(xls(x|m|b)?|docx?|pdf|shp|dbf|shx|xml|'
