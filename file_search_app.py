@@ -14,24 +14,9 @@ class App(basic_combo_dialog.BasicComboGUI):
         basic_combo_dialog.BasicComboGUI.__init__(self, frame_title=title, date_picker=date_picker)
         self.set_combo_box_label("Select named expression or\nenter custom expression\n(Use wildcard '*' or regex)")
         self.set_combo_box_width(45)
-        self.dict_choice = {'Word (doc, docx)': '.+\.docx?$',
-                            'Excel (xls, xlsx, xlsb, xlsm)': '.+\.xls(x|b|m)?',
-                            'Audio (mp3, wav, au, m4p, etc.)': '.+\.(m4p|cdda|mp3|wma|mp4a|au|ra|flac|cda|wav|m4a)$',
-                            'PDF files': '.+\.pdf$',
-                            'Visio (vsd, vss, vst, vsx, vdx, vtx)': '.+\.(vs(d|s|t|x)|v(d|t)x)$',
-                            'Images (png, gif, jpg, bmp, tif, ico, svg)': '.+\.(png|gif|jpg|bmp|tif|ico|svgx?)$',
-                            'Word/Excel/PDF files': '.+\.(xls(x|m|b)?|docx?|pdf)$',
-                            'Video (avi, wmv, mpg, mp4, etc.)': '.+\.(avi|wmv|qt|mov|mp(4|e?g|v)|m4p|flv|rm|webm)$',
-                            'Numeric file names': '^[0-9_\-\.]+\.(xls(x|m|b)?|docx?|pdf|shp|dbf|shx|xml|'
-                                                  'txt|csv|bmp|sql|gif|png|jpg|tif|py|x?html?|vb|cp*)$'}
+        self.dict_choice = self.get_expressions('file_search.ini')
         lst_choice = list(self.dict_choice.keys())
         self.lst_combo_values = lst_choice
-        # self.lst_combo_values = ['.*\.docx',
-        #                          '^[0-9_-]+\..*',
-        #                          '.*\.xls',
-        #                          '.*\.pdf',
-        #                          '.*(gw|(ground|grnd).*(water|wtr)).*\.(pdf|xls|doc)',
-        #                          '.*\.(png|jpg|gif|bmp)$']
         self.lst_combo_values.sort()
         self.combo_box['values'] = self.lst_combo_values
         if self.date_picker:
@@ -39,6 +24,16 @@ class App(basic_combo_dialog.BasicComboGUI):
             self.selected_date_end.set(datetime.date.today().strftime('%m/%d/%Y'))
         # self.root.bind('<Return>', self.okclick)
         # self.combo_box.current(0)
+
+    @staticmethod
+    def get_expressions(fname):
+        f = open(fname, 'r')
+        dict_expr = {}
+        for line in f:
+            m = re.match('(.*)=(.*)', line)
+            if m:
+                dict_expr[m.group(1).strip()] = m.group(2).strip()
+        return dict_expr
 
     def okclick(self):
         # override click event
