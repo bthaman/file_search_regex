@@ -14,7 +14,22 @@ class App(basic_combo_dialog.BasicComboGUI):
         basic_combo_dialog.BasicComboGUI.__init__(self, frame_title=title, date_picker=date_picker)
         self.set_combo_box_label("Select named expression or\nenter custom expression\n(Use wildcard '*' or regex)")
         self.set_combo_box_width(45)
-        self.dict_choice = self.get_expressions('file_search.ini')
+
+        # define named expressions
+        # note that i have tried reading these from a config file, the act of opening a file for reading
+        # somehow keeps the tk window from opening outside of pycharm (i.e. it opens in pycharm, but
+        # not when run from a bat file, or from a command window outside of pycharm's
+        self.dict_choice = {'Word (doc, docx)': '.+\.docx?$',
+                            'Excel (xls, xlsx, xlsb, xlsm)': '.+\.xls(x|b|m)?',
+                            'Audio (mp3, wav, au, m4p, etc.)': '.+\.(m4p|cdda|mp3|wma|mp4a|au|ra|flac|cda|wav|m4a)$',
+                            'PDF files': '.+\.pdf$',
+                            'Visio (vsd, vss, vst, vsx, vdx, vtx)': '.+\.(vs(d|s|t|x)|v(d|t)x)$',
+                            'Images (png, gif, jpg, bmp, tif, svg)': '.+\.(png|gif|jpg|bmp|tif|svgx?)$',
+                            'Word/Excel/PDF files': '.+\.(xls(x|m|b)?|docx?|pdf)$',
+                            'Video (avi, wmv, mpg, mp4, etc.)': '.+\.(avi|wmv|qt|mov|mp(4|e?g|v)|m4p|flv|rm|webm)$',
+                            'Numeric file names': '^[0-9_\-\.]+\.(xls(x|m|b)?|docx?|pdf|shp|dbf|shx|xml|'
+                                                  'txt|csv|bmp|sql|gif|png|jpg|tif|py|x?html?|vb|cp*)$'}
+
         lst_choice = list(self.dict_choice.keys())
         self.lst_combo_values = lst_choice
         self.lst_combo_values.sort()
@@ -24,16 +39,6 @@ class App(basic_combo_dialog.BasicComboGUI):
             self.selected_date_end.set(datetime.date.today().strftime('%m/%d/%Y'))
         # self.root.bind('<Return>', self.okclick)
         # self.combo_box.current(0)
-
-    @staticmethod
-    def get_expressions(fname):
-        f = open(fname, 'r')
-        dict_expr = {}
-        for line in f:
-            m = re.match('(.*)=(.*)', line)
-            if m:
-                dict_expr[m.group(1).strip()] = m.group(2).strip()
-        return dict_expr
 
     def okclick(self):
         # override click event
