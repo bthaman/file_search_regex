@@ -6,6 +6,7 @@
 #define MyAppVersion "1.0"
 #define MyAppPublisher "wjt"
 #define MyAppExeName "file_search_app.exe"
+#define MyAppIcoName "search-in-folder_64.ico"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -20,7 +21,6 @@ DefaultDirName={localappdata}\{#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=C:\Users\wjt\Google Drive\Programming\Python\Installer\PythonFileSearchApp
 OutputBaseFilename=setup
-SetupIconFile=C:\Users\wjt\Google Drive\Programming\Python\Installer\PythonFileSearchApp\search-in-folder_32.ico
 Compression=lzma
 SolidCompression=yes
 
@@ -32,6 +32,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "C:\Users\wjt\Google Drive\Programming\Python\PycharmProjects\file_search\dist\file_search_app.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\wjt\Google Drive\Programming\Python\PycharmProjects\file_search\dist\file_search.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\wjt\Google Drive\Programming\Python\PycharmProjects\file_search\dist\search-in-folder_64.ico"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\wjt\Google Drive\Programming\Python\PycharmProjects\file_search\dist\_bz2.pyd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\wjt\Google Drive\Programming\Python\PycharmProjects\file_search\dist\_ctypes.pyd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\wjt\Google Drive\Programming\Python\PycharmProjects\file_search\dist\_decimal.pyd"; DestDir: "{app}"; Flags: ignoreversion
@@ -81,7 +83,7 @@ Source: "C:\Users\wjt\Google Drive\Programming\Python\PycharmProjects\file_searc
 
 [Icons]
 Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFileName: "{app}\{#MyAppIcoName}"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
