@@ -33,9 +33,12 @@ def find_files(directory, pattern, dt1=None, dt2=None):
             try:
                 dtmod = time.strftime('%Y-%m-%d', time.localtime(os.path.getmtime(file)))
             except PermissionError:
-                pass
+                dtmod = None
+            except FileNotFoundError:
+                dtmod = None
 
-            if matched and dt1 <= dtmod <= dt2:
+
+            if dtmod and matched and dt1 <= dtmod <= dt2:
                 size = os.path.getsize(file)
                 lastmod = time.strftime('%Y-%m-%d %H:%M', time.localtime(os.path.getmtime(file)))
                 # another way --> lastmod = time.ctime(os.path.getmtime(filename))
