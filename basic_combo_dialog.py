@@ -52,7 +52,7 @@ class BasicComboGUI(ttk.LabelFrame):
 
         self.set_combo_box_label('Change me')
         self.combo_box = ttk.Combobox(self, textvariable=self.entered_value, width=12)
-        self.hyperlink = ttk.Label(self, text='regex cheatsheet', foreground='blue', cursor='hand2')
+        self.hyperlink = ttk.Label(self, text='regex helper', foreground='blue', cursor='hand2')
         self.hyperlink.bind("<Button-1>", self.callback)
         self.chk_box = ttk.Checkbutton(self, text='Search only directory names',
                                        variable=self.chk_val)
@@ -138,7 +138,7 @@ class BasicComboGUI(ttk.LabelFrame):
                 self.btn_ok.configure(state='disabled')
 
     def callback(self, event):
-        webbrowser.open_new(r'https://www.debuggex.com/cheatsheet/regex/python')
+        webbrowser.open_new(r'www.pyregex.com')
 
     def get_durations(self):
         return self.lst_combo_values
@@ -160,5 +160,5 @@ class BasicComboGUI(ttk.LabelFrame):
 
 
 if __name__ == "__main__":
-    gui = BasicComboGUI(frame_title='Change Me', date_picker=True)
+    gui = BasicComboGUI(frame_title='Change Me', date_picker=False)
     gui.show_window()

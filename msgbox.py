@@ -18,5 +18,24 @@ def show_message(title, message):
     tkmb.showinfo(title=title, message=message)
 
 if __name__ == '__main__':
-    show_error('mytitle', 'mymessage')
-    show_message('mytitle', 'mymessage')
+    import math
+    show_message('Informative Message', 'You are about to see several\ndemonstrations '
+                                        'of tkinter\'s messagebox\nshow_error and show_message methods.')
+    try:
+        x = 1
+        y = 0
+        print(x/y)
+    except ZeroDivisionError as e:
+        show_error('Error', e)
+    try:
+        print(math.log(y))
+    except ValueError as e:
+        show_error("Error", e)
+    try:
+        percent_effort_given = 101
+        if percent_effort_given < 50:
+            show_message('Inspirational Message', 'Try harder!')
+        elif percent_effort_given > 100:
+            raise ValueError('You can\'t give more than 100%')
+    except ValueError as e:
+        show_error('Error', e)

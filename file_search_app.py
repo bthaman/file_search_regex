@@ -7,6 +7,7 @@ import basic_combo_dialog
 from read_config_functions import *
 import msgbox
 from file_search import *
+import webbrowser
 
 
 class App(basic_combo_dialog.BasicComboGUI):
@@ -19,6 +20,7 @@ class App(basic_combo_dialog.BasicComboGUI):
         # read named expressions from file_search.config
         fn = os.path.join(os.getcwd(), 'file_search.config')
         self.dict_choice = configsectionmap(fn, 'named expressions')
+        self.regex_url = configsectionmap(fn, 'regex url')
         lst_choice = list(self.dict_choice.keys())
         self.lst_combo_values = lst_choice
         self.lst_combo_values.sort()
@@ -53,6 +55,8 @@ class App(basic_combo_dialog.BasicComboGUI):
             except KeyError:
                 search_dir_topdown(self.entered_value.get(), 'search_results', dt1, dt2)
 
+    def callback(self, event):
+        webbrowser.open_new(self.regex_url['cheatsheet'])
 
 if __name__ == "__main__":
     app = App(date_picker=True)
