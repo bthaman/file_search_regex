@@ -37,7 +37,6 @@ def find_files(directory, pattern, dt1=None, dt2=None):
             except FileNotFoundError:
                 dtmod = None
 
-
             if dtmod and matched and dt1 <= dtmod <= dt2:
                 size = os.path.getsize(file)
                 lastmod = time.strftime('%Y-%m-%d %H:%M', time.localtime(os.path.getmtime(file)))
