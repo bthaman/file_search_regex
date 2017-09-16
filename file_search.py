@@ -3,9 +3,9 @@ import fnmatch
 import file_dir_dialog as fdd
 import pandas as pd
 import msgbox
-import re
 import time
 from datetime import date
+from read_config_functions import *
 
 
 def find_files(directory, pattern, dt1=None, dt2=None):
@@ -39,10 +39,11 @@ def find_files(directory, pattern, dt1=None, dt2=None):
 
             if dtmod and matched and dt1 <= dtmod <= dt2:
                 size = os.path.getsize(file)
+                extension = os.path.splitext(file)[1][1:]
                 lastmod = time.strftime('%Y-%m-%d %H:%M', time.localtime(os.path.getmtime(file)))
                 # another way --> lastmod = time.ctime(os.path.getmtime(filename))
                 # yield turns the function into a generator (form of iterator)
-                yield file, root, basename, size, lastmod
+                yield file, root, basename, extension, size, lastmod
 
 
 def find_dirs(directory, pattern):
@@ -62,15 +63,20 @@ def find_dirs(directory, pattern):
 
 def search_dir_topdown(pattern, filename, dt1=None, dt2=None):
     try:
+        fn = os.path.join(os.getcwd(), 'file_search.config')
+        last_dir = configsectionmap(fn, 'last path')
         # create dataframe from generator, tweak it, write to excel
-        dir_selected = fdd.get_directory()
+        dir_selected = fdd.get_directory(last_dir)
+        # be sure directory is not None type, and that it exists before setting last path
+        if dir_selected and os.path.isdir(dir_selected):
+            update_setting(fn, 'last path', 'last', dir_selected)
         if not dir_selected:
             return
         df = pd.DataFrame(find_files(dir_selected, pattern, dt1, dt2), columns=['file', 'directory', 'filename',
-                                                                             'file_size', 'lastmod'])
+                                                                                'extension', 'file_size', 'lastmod'])
         df['directory'] = '=HYPERLINK("' + df['directory'] + '")'
         df['filename'] = '=HYPERLINK("' + df['file'] + '", "' + df['filename'] + '")'
-        df = df[['directory', 'filename', 'file_size', 'lastmod']]
+        df = df[['directory', 'filename', 'extension', 'file_size', 'lastmod']]
         if df.shape[0] == 0:
             msgbox.show_message('Bummer', 'No files found using that expression')
             return

@@ -16,9 +16,9 @@ def get_files():
     return in_path if in_path else None
 
 
-def get_directory():
+def get_directory(initial_dir):
     tk.Tk().withdraw()  # Close the root window
-    in_path = fd.askdirectory(title='Choose directory', initialdir=os.getcwd())
+    in_path = fd.askdirectory(title='Choose directory', initialdir=initial_dir)
     tk.Tk().destroy()
     return in_path if in_path else None
 
