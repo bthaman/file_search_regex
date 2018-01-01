@@ -2,10 +2,9 @@
 Application to search the file system using a user-specified search expression.
 The expression can either use the asterisk (*) wildcard character, or be a regex (regular expression)
 """
+import os
 import datetime
 import basic_combo_dialog
-from read_config_functions import *
-import msgbox
 from file_search import *
 import webbrowser
 

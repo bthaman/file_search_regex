@@ -1,4 +1,3 @@
-import os
 import fnmatch
 import file_dir_dialog as fdd
 import pandas as pd
@@ -6,6 +5,7 @@ import msgbox
 import time
 from datetime import date
 from read_config_functions import *
+import os
 
 
 def find_files(directory, pattern, dt1=None, dt2=None):
@@ -81,7 +81,7 @@ def search_dir_topdown(pattern, filename, dt1=None, dt2=None):
             msgbox.show_message('Bummer', 'No files found using that expression')
             return
         filename = os.path.splitext(filename)[0]
-        df.to_excel(filename + '.xlsx')
+        df.to_excel(filename + '.xlsx', index=False)
         os.startfile(filename + '.xlsx')
     except PermissionError:
         msgbox.show_error('Permission Error', filename + '.xlsx already open')
