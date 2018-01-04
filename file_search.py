@@ -91,7 +91,9 @@ def search_dir_topdown(pattern, filename, dt1=None, dt2=None):
 
 def search_dir_only(pattern, filename):
     try:
-        dir_selected = fdd.get_directory()
+        fn = os.path.join(os.getcwd(), 'file_search.config')
+        last_dir = configsectionmap(fn, 'last path')
+        dir_selected = fdd.get_directory(last_dir)
         if not dir_selected:
             return
         df = pd.DataFrame(find_dirs(dir_selected, pattern), columns=['Directory'])
@@ -100,7 +102,7 @@ def search_dir_only(pattern, filename):
             msgbox.show_message('Bummer', 'No directories found using that expression')
             return
         filename = os.path.splitext(filename)[0]
-        df.to_excel(filename + '.xlsx')
+        df.to_excel(filename + '.xlsx', index=False)
         os.startfile(filename + '.xlsx')
     except PermissionError:
         msgbox.show_error('Permission Error', filename + '.xlsx already open')
