@@ -24,5 +24,5 @@ def get_directory(initial_dir):
 
 
 if __name__ == "__main__":
-    print(get_directory())
+    print(get_directory(os.getcwd()))
     print(get_files())

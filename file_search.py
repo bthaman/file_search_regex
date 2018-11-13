@@ -13,11 +13,14 @@ def find_files(directory, pattern, dt1=None, dt2=None):
     dt2_default = date.today().strftime('%Y-%m-%d')
     dt1 = dt1_default if dt1 is None else dt1
     dt2 = dt2_default if dt2 is None else dt2
+    global num_files_searched
+    num_files_searched = 0
     for root, dirs, files in os.walk(directory):
         # root: current directory, type string
         # dirs: list of directories within root
         # files: list of files within root
         for basename in files:
+            num_files_searched += 1
             # attempt match using regex; if failure, use fnmatch
             # note that case is ignored
             try:
@@ -77,6 +80,8 @@ def search_dir_topdown(pattern, filename, dt1=None, dt2=None):
         df['directory'] = '=HYPERLINK("' + df['directory'] + '")'
         df['filename'] = '=HYPERLINK("' + df['file'] + '", "' + df['filename'] + '")'
         df = df[['directory', 'filename', 'extension', 'file_size', 'lastmod']]
+        files_searched_header = 'files searched: {:,.0f}'.format(num_files_searched)
+        df.insert(5, files_searched_header, '')
         if df.shape[0] == 0:
             msgbox.show_message('Bummer', 'No files found using that expression')
             return

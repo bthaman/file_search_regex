@@ -7,6 +7,8 @@ import datetime
 import basic_combo_dialog
 from file_search import *
 import webbrowser
+import utility_functions as uf
+import uuid
 
 
 class App(basic_combo_dialog.BasicComboGUI):
@@ -32,27 +34,41 @@ class App(basic_combo_dialog.BasicComboGUI):
 
     def okclick(self):
         # override click event
-        if self.date_picker:
-            try:
-                dt1 = datetime.datetime.strptime(self.selected_date_start.get(), '%m/%d/%Y').strftime('%Y-%m-%d')
-                dt2 = datetime.datetime.strptime(self.selected_date_end.get(), '%m/%d/%Y').strftime('%Y-%m-%d')
-            except ValueError:
-                msgbox.show_error('Value Error', 'Date format is mm/dd/yyyy')
-                # raise ValueError('Date format is mm/dd/yyyy')
-        else:
-            dt1 = None
-            dt2 = None
+        try:
+            # used search_results.xlsx previously for the file name. now using uuid.
+            # check to see if search_results.xlsx is already open
+            open_excel_files = uf.get_opened_files(['xlsx', 'xlsm'])
+            if 'search_results.xlsx' in [os.path.split(el)[1] for el in open_excel_files]:
+                raise PermissionError('search_results.xlsx already open.\n\n'
+                                      'Please close or rename file and try again.')
+            # get uuid for file name
+            file_name = str(uuid.uuid4())
+            if self.date_picker:
+                try:
+                    dt1 = datetime.datetime.strptime(self.selected_date_start.get(), '%m/%d/%Y').strftime('%Y-%m-%d')
+                    dt2 = datetime.datetime.strptime(self.selected_date_end.get(), '%m/%d/%Y').strftime('%Y-%m-%d')
+                except ValueError:
+                    msgbox.show_error('Value Error', 'Date format is mm/dd/yyyy')
+                    raise Exception('')
+            else:
+                dt1 = None
+                dt2 = None
 
-        if self.chk_val.get():
-            try:
-                search_dir_only(self.dict_choice[self.entered_value.get()], 'search_results')
-            except KeyError:
-                search_dir_only(self.entered_value.get(), 'search_results')
-        else:
-            try:
-                search_dir_topdown(self.dict_choice[self.entered_value.get()], 'search_results', dt1, dt2)
-            except KeyError:
-                search_dir_topdown(self.entered_value.get(), 'search_results', dt1, dt2)
+            if self.chk_val.get():
+                try:
+                    search_dir_only(self.dict_choice[self.entered_value.get()], filename=file_name)
+                except KeyError:
+                    search_dir_only(self.entered_value.get(), filename=file_name)
+            else:
+                try:
+                    search_dir_topdown(self.dict_choice[self.entered_value.get()], file_name, dt1, dt2)
+                except KeyError:
+                    search_dir_topdown(self.entered_value.get(), file_name, dt1, dt2)
+        except PermissionError as e:
+            msgbox.show_error('Can\'t do what you\'re trying to do...', e)
+        except Exception as e:
+            if len(e.args[0]) > 0:
+                msgbox.show_error('Error', e)
 
     def callback(self, event):
         webbrowser.open_new(self.regex_url['cheatsheet'])
