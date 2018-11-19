@@ -1,4 +1,5 @@
 # regex_file_search
+![sample image](https://raw.githubusercontent.com/bthaman/file_search_regex/master/images/file_search.jpg)
 Python application to search the file system using either a wildcard character (*), or regular expressions.
 User choices are made through a window: user selects from pre-defined named expressions (e.g., Word files (.doc, .docx)), or can enter an expression directly.
 The user can also filter by dates.
