@@ -25,13 +25,18 @@ pip install pandas
 
 ## Running the Application
 The application is launched by executing *file_search_app.py*.
-* **Using ad hoc regex expression**
+* **Using an ad hoc regex expression**
 ![sample image](https://raw.githubusercontent.com/bthaman/file_search_regex/master/images/search_file_system.jpg)
-* **Using named expression read from *file_search.config***
+
+* **Using a named expression read from file_search.config**
 ![sample image](https://raw.githubusercontent.com/bthaman/file_search_regex/master/images/search_file_system2.jpg)
-* **Date picker**
+
+* **Using the date picker**
 ![sample image](https://raw.githubusercontent.com/bthaman/file_search_regex/master/images/date_picker.jpg)
 
-## Authors
+### Output
+![sample image](https://raw.githubusercontent.com/bthaman/file_search_regex/master/images/file_search_output.jpg)
+
+## Author
 
 * **Bill Thaman** - *Initial work* - [bthaman](https://github.com/bthaman)
