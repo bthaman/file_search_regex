@@ -4,20 +4,12 @@ Python application to search the file system using either a wildcard character (
 The results of the search are written to an MS Excel file, and the file is automatically opened after results are written. Results include directory, filename, file extension, filesize, and last modified date. The directory and filename are written as hyperlinks.
 
 ### Prerequisites
-The files included in this repo were only tested in Python 3.6.1. The packages used, most of which are in the Python 3.6 standard library, are listed below.
-* configparser
-* datetime
-* fnmatch
-* pandas
-* re
-* time
-* tkinter
-* uuid
-* webbrowser
+The files included in this repo were only tested in Python 3.6.1. 
+The only package not in the standard library is pandas (0.20.1).
 
-It is recommended that any missing packages be installed using pip. For example:
+The minimum version of pandas can be installed using pip. For example:
 ```
-pip install pandas
+pip install pandas>=0.20.1
 ```
 ## Built With
 
