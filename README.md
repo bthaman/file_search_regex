@@ -31,4 +31,4 @@ The application is launched by executing *file_search_app.py*.
 
 ## Author
 
-* **Bill Thaman** - *Initial work* - [bthaman](https://github.com/bthaman)
+* **Bill Thaman** - *Initial work* - [bthaman/file_search_regex](https://github.com/bthaman/file_search_regex)
