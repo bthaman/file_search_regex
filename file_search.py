@@ -5,7 +5,42 @@ import msgbox
 import time
 from datetime import date
 from read_config_functions import *
+import xlwings as xw
 import os
+
+
+class New_Excel_WB:
+    def __init__(self):
+        self.wb = xw.Book()
+
+    def df_to_excel(self, df, path):
+        self.wb.sheets.active.range('A1').options(index=False).value = df
+        self.enable_autofilter()
+        self.columnformat()
+        self.save(path=path)
+
+    def enable_autofilter(self):
+        # xw.Range('A1').api.AutoFilter(1)
+        self.wb.sheets.active.range('A1').api.AutoFilter(1)
+
+    def columnformat(self):
+        sht = self.wb.sheets.active
+        sht.api.Columns('A:B').ColumnWidth = 70
+        sht.api.Columns('C:C').ColumnWidth = 12
+        sht.api.Columns('D:D').ColumnWidth = 15
+        sht.api.Columns('E:E').ColumnWidth = 20
+        sht.api.Columns('F:F').ColumnWidth = 25
+        sht.api.Columns('D:D').NumberFormat = '#,##0'
+        sht.api.Rows('1:1').Font.Bold = True
+
+    def close(self):
+        self.wb.close()
+
+    def save(self, path=None):
+        if path:
+            self.wb.save(path=path)
+        else:
+            self.wb.save()
 
 
 def find_files(directory, pattern, dt1=None, dt2=None):
@@ -27,11 +62,15 @@ def find_files(directory, pattern, dt1=None, dt2=None):
                 re_pattern = re.compile(pattern, re.IGNORECASE)
                 matched = re_pattern.match(basename)
             except Exception:
-                matched = fnmatch.fnmatch(basename, pattern)
+                try:
+                    matched = fnmatch.fnmatch(basename, pattern)
+                except:
+                    matched = False
             try:
                 file = os.path.join(root, basename)
             except TypeError:
-                return None
+                # return None
+                pass
             # get the last modified date. a PermissionError might be thrown; if so, keep going
             try:
                 dtmod = time.strftime('%Y-%m-%d', time.localtime(os.path.getmtime(file)))
@@ -39,11 +78,18 @@ def find_files(directory, pattern, dt1=None, dt2=None):
                 dtmod = None
             except FileNotFoundError:
                 dtmod = None
+            except:
+                dtmod = None
 
             if dtmod and matched and dt1 <= dtmod <= dt2:
-                size = os.path.getsize(file)
-                extension = os.path.splitext(file)[1][1:]
-                lastmod = time.strftime('%Y-%m-%d %H:%M', time.localtime(os.path.getmtime(file)))
+                try:
+                    size = os.path.getsize(file)
+                    extension = os.path.splitext(file)[1][1:]
+                    lastmod = time.strftime('%Y-%m-%d %H:%M', time.localtime(os.path.getmtime(file)))
+                except:
+                    size = 0
+                    extension = ''
+                    lastmod = None
                 # another way --> lastmod = time.ctime(os.path.getmtime(filename))
                 # yield turns the function into a generator (form of iterator)
                 yield file, root, basename, extension, size, lastmod
@@ -76,7 +122,8 @@ def search_dir_topdown(pattern, filename, dt1=None, dt2=None):
         if not dir_selected:
             return
         df = pd.DataFrame(find_files(dir_selected, pattern, dt1, dt2), columns=['file', 'directory', 'filename',
-                                                                                'extension', 'file_size', 'lastmod'])
+                                                                                'extension', 'file_size',
+                                                                                'lastmod'])
         df['directory'] = '=HYPERLINK("' + df['directory'] + '")'
         df['filename'] = '=HYPERLINK("' + df['file'] + '", "' + df['filename'] + '")'
         df = df[['directory', 'filename', 'extension', 'file_size', 'lastmod']]
@@ -86,8 +133,22 @@ def search_dir_topdown(pattern, filename, dt1=None, dt2=None):
             msgbox.show_message('Bummer', 'No files found using that expression')
             return
         filename = os.path.splitext(filename)[0]
-        df.to_excel(filename + '.xlsx', index=False)
-        os.startfile(filename + '.xlsx')
+
+        # if using pandas to save to excel:
+        # df.to_excel(filename + '.xlsx', index=False)
+        # os.startfile(filename + '.xlsx')
+
+        # if using xlwings to save to excel
+        try:
+            new_excel_wb = New_Excel_WB()
+            new_excel_wb.df_to_excel(df=df, path=filename + '.xlsx')
+        except:
+            # msgbox.show_message('debug', str(len(df.index)) + ': ' + str(df.shape))
+            # msgbox.show_error('Error', 'Error creating Excel file')
+            new_excel_wb.close()
+            msgbox.show_message('Info', 'There are too many rows to write to Excel.\nSwitching to csv.')
+            df.to_csv(filename + '.csv', index=False)
+            os.startfile(filename + '.csv')
     except PermissionError:
         msgbox.show_error('Permission Error', filename + '.xlsx already open')
     except Exception as e:
@@ -107,8 +168,12 @@ def search_dir_only(pattern, filename):
             msgbox.show_message('Bummer', 'No directories found using that expression')
             return
         filename = os.path.splitext(filename)[0]
-        df.to_excel(filename + '.xlsx', index=False)
-        os.startfile(filename + '.xlsx')
+        # if using pandas to save to excel (requires openpyxl)
+        # df.to_excel(filename + '.xlsx', index=False)
+        # os.startfile(filename + '.xlsx')
+        # use xlwings to save to excel
+        new_excel_wb = New_Excel_WB()
+        new_excel_wb.df_to_excel(df=df, path=filename + '.xlsx')
     except PermissionError:
         msgbox.show_error('Permission Error', filename + '.xlsx already open')
     except Exception as e:

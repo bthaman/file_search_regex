@@ -9,11 +9,14 @@ from file_search import *
 import webbrowser
 import utility_functions as uf
 import uuid
+import logger_handler
 
 
 class App(basic_combo_dialog.BasicComboGUI):
     # inherits from BasicComboGUI
     def __init__(self, title="Search File System", date_picker=False):
+        self.logger_debug = logger_handler.setup_logger(name='logger_debug', log_file=os.path.join(os.getcwd(),'debug.log'))
+        self.logger_exception = logger_handler.setup_logger(name='logger_exception', log_file=os.path.join(os.getcwd(),'error.log'))
         basic_combo_dialog.BasicComboGUI.__init__(self, frame_title=title, date_picker=date_picker)
         self.set_combo_box_label("Select named expression or\nenter custom expression\n(Use wildcard '*' or regex)")
         self.set_combo_box_width(45)
@@ -43,6 +46,7 @@ class App(basic_combo_dialog.BasicComboGUI):
                                       'Please close or rename file and try again.')
             # get uuid for file name
             file_name = str(uuid.uuid4())
+            self.logger_debug.info(file_name)
             if self.date_picker:
                 try:
                     dt1 = datetime.datetime.strptime(self.selected_date_start.get(), '%m/%d/%Y').strftime('%Y-%m-%d')
@@ -64,9 +68,12 @@ class App(basic_combo_dialog.BasicComboGUI):
                     search_dir_topdown(self.dict_choice[self.entered_value.get()], file_name, dt1, dt2)
                 except KeyError:
                     search_dir_topdown(self.entered_value.get(), file_name, dt1, dt2)
+                except Exception as e:
+                    self.logger_exception('error in search_dir_topdown')
         except PermissionError as e:
             msgbox.show_error('Can\'t do what you\'re trying to do...', e)
         except Exception as e:
+            self.logger_exception.exception('error in click event')
             if len(e.args[0]) > 0:
                 msgbox.show_error('Error', e)
 
