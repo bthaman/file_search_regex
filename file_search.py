@@ -129,6 +129,7 @@ def search_dir_topdown(pattern, filename, dt1=None, dt2=None):
         df = df[['directory', 'filename', 'extension', 'file_size', 'lastmod']]
         files_searched_header = 'files searched: {:,.0f}'.format(num_files_searched)
         df.insert(5, files_searched_header, '')
+        df.insert(6, pattern, '')
         if df.shape[0] == 0:
             msgbox.show_message('Bummer', 'No files found using that expression')
             return
