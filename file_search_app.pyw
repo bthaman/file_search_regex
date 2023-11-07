@@ -59,14 +59,20 @@ class App(basic_combo_dialog.BasicComboGUI):
                 dt2 = None
 
             if self.chk_val.get():
+                # search directory only
                 try:
+                    # if the value in the text box is a valid key, this will execute
                     search_dir_only(self.dict_choice[self.entered_value.get()], filename=file_name)
                 except KeyError:
+                    # the value entered was not a valid key, so use the entered value as the expression
                     search_dir_only(self.entered_value.get(), filename=file_name)
             else:
+                # search files
                 try:
+                    # if the value in the text box is a valid key, this will execute
                     search_dir_topdown(self.dict_choice[self.entered_value.get()], file_name, dt1, dt2)
                 except KeyError:
+                    # the value entered was not a valid key, so use the entered value as the expression
                     search_dir_topdown(self.entered_value.get(), file_name, dt1, dt2)
                 except Exception as e:
                     self.logger_exception('error in search_dir_topdown')
