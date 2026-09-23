@@ -5,15 +5,15 @@ The results of the search are written to an MS Excel file, and the file is autom
 
 ### Prerequisites
 The files included in this repo were only tested in Python 3.6.1. 
-The only package not in the standard library is pandas (0.20.1).
+The only packages not in the standard library are pandas (2.3.3) and xlwings (0.37.0).
 
 The minimum version of pandas can be installed using pip. For example:
 ```
 pip install pandas>=0.20.1
 ```
-## Built With
+## Run With Python Version
 
-* [Python 3.6.1 |Anaconda 4.4.0 (32-bit)](https://www.anaconda.com/) - The Python interpreter used
+* Python 3.10.4 - The Python interpreter most recently used (Sep. 2026)
 
 ## Running the Application
 The application is launched by executing *file_search_app.py*. 
