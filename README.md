@@ -16,7 +16,7 @@ pip install pandas>=0.20.1
 * [Python 3.6.1 |Anaconda 4.4.0 (32-bit)](https://www.anaconda.com/) - The Python interpreter used
 
 ## Running the Application
-The application is launched by executing *file_search_app.py*.
+The application is launched by executing *file_search_app.py*. From VS Code PS terminal --> .\.venv\scripts\pythonw.exe file_search_app.py
 * **Using an ad hoc regex expression**
 ![sample image](https://raw.githubusercontent.com/bthaman/file_search_regex/master/images/search_file_system.jpg)
 
